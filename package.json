@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "nodemon": "nodemon index.js",
     "lint": "eslint . --ext .js",
     "format": "prettier --write ."
   },
@@ -14,12 +14,14 @@
   "description": "",
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "devDependencies": {
+    "@faker-js/faker": "^9.8.0",
     "eslint": "^9.28.0",
     "eslint-plugin-prettier": "^5.4.1",
     "nodemon": "^3.1.10",
     "prettier": "^3.5.3"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "formidable": "^3.5.4",

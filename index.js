@@ -5,12 +5,14 @@ require('./libs/config');
 const log = require('./libs/logger');
 
 const checkRoute = require('./routes/check');
+const usersRoute = require('./routes/users');
 
 const app = express();
 
 app.use(helmet());
 
 app.use('/check', checkRoute);
+app.use('/users', usersRoute);
 
 app.use('/', (req, res) => {
   res.send({

@@ -4,12 +4,8 @@ require('./config');
 const log = require('./logger');
 
 const pool = new Pool({
-  user: process.env.PG_USER,
-  host: process.env.PG_HOST,
-  database: process.env.PG_DB,
-  password: process.env.PG_PASS,
-  port: process.env.PG_PORT,
-  max: process.env.PG_CONN,
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
 });
 
 pool.on('connect', async () => {
