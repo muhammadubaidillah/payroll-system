@@ -1,18 +1,21 @@
 const express = require('express');
 const helmet = require('helmet');
+const config = require('./config');
+const log = require('./src/utils/logger');
 
-require('./libs/config');
-const log = require('./libs/logger');
-
-const checkRoute = require('./routes/check');
-const usersRoute = require('./routes/users');
+const checkRoute = require('./src/routes/check');
+const usersRoute = require('./src/routes/users');
+const authRoute = require('./src/routes/authRoutes');
 
 const app = express();
 
 app.use(helmet());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/check', checkRoute);
 app.use('/users', usersRoute);
+app.use('/auth', authRoute);
 
 app.use('/', (req, res) => {
   res.send({
@@ -21,6 +24,6 @@ app.use('/', (req, res) => {
   });
 });
 
-app.listen(process.env.PORT || 3001, '0.0.0.0', () =>
-  log.info(`Listening at port ${process.env.PORT || 3001}`)
+app.listen(config.port || 3001, '0.0.0.0', () =>
+  log.info(`Listening at port ${config.port || 3001}`)
 );

@@ -1,5 +1,5 @@
 const express = require('express');
-const { querySingle } = require('../libs/pgsql');
+const { querySingle } = require('../../database/pgsql');
 
 const router = express.Router();
 

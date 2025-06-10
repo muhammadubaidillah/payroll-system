@@ -1,4 +1,4 @@
-const { querySingle } = require('../libs/pgsql');
+const { querySingle } = require('../../database/pgsql');
 
 function getEmployeeByUsername(username) {
   return querySingle(`SELECT * FROM users where username = $1`, [username]);

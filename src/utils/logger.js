@@ -1,6 +1,6 @@
 const pino = require('pino');
 const pretty = require('pino-pretty');
-require('./config');
+const config = require('../../config');
 
 const logger = pino(
   pretty({
@@ -8,7 +8,7 @@ const logger = pino(
     translateTime: 'SYS:standard',
   })
 );
-logger.level = logger.levels.values[process.env.LOG_LEVEL] || Infinity;
+logger.level = logger.levels.values[config.log.level] || Infinity;
 
 logger.debug('log initiated');
 
