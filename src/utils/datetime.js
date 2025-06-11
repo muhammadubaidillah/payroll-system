@@ -14,6 +14,7 @@ const formats = {
   FMT_DATE_TIME_YMDHMSU: 'YYYY-MM-DD HH:mm:ss.SSS',
   FMT_DATE_TIME_YMDTZHMS: `YYYY-MM-DDTHH:mm:ssZ`,
   FMT_DATE_TIME_YMDTZHMSU: `YYYY-MM-DD'T'HH:mm:ssZ`,
+  FMT_DATE_TIME_HM: `HH:mm`,
 };
 
 function yesterday(format) {
@@ -46,6 +47,15 @@ function isWeekend(date) {
   return moment(date).isoWeekday() > 5;
 }
 
+function isAfterHours(date) {
+  const afterHoursStart = moment(date).clone().hour(17).minute(0).second(0).millisecond(0);
+  return moment(date).isSameOrAfter(afterHoursStart);
+}
+
+function isSameDay(date, comparedDate) {
+  return moment(date).isSame(moment(comparedDate), 'day');
+}
+
 module.exports = {
   now,
   yesterday,
@@ -55,4 +65,6 @@ module.exports = {
   formatDate,
   isAfter,
   isWeekend,
+  isAfterHours,
+  isSameDay,
 };

@@ -1,5 +1,6 @@
 const { submitAttendance } = require('../services/attendanceService');
 const { getClientIp } = require('../utils');
+const logger = require('../utils/logger');
 
 async function checkIn(req, res) {
   try {
@@ -13,7 +14,7 @@ async function checkIn(req, res) {
       return res.status(400).json({ error: result.error });
     }
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return res.status(500).json({ error: 'Server error' });
   }
 }
@@ -30,7 +31,7 @@ async function checkOut(req, res) {
       return res.status(400).json({ error: result.error });
     }
   } catch (error) {
-    console.error(err);
+    logger.error(error);
     return res.status(500).json({ error: 'Server error' });
   }
 }

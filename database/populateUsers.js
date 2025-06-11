@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const { faker } = require('@faker-js/faker');
 const { query } = require('./libs/pgsql');
+const logger = require('../src/utils/logger');
 
 const SALT_ROUNDS = 10;
 
@@ -35,9 +36,9 @@ async function populateUsers() {
       );
     }
 
-    console.log('✅ Seeder complete!');
+    logger.info('✅ Seeder complete!');
   } catch (error) {
-    console.error('❌ Seeder error:', error);
+    logger.error('❌ Seeder error:', error);
     process.exitCode = 1;
   } finally {
     process.exit();
