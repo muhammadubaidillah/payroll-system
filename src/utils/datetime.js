@@ -42,6 +42,10 @@ function isAfter(date, comparedDate) {
   return moment(date).isAfter(comparedDate);
 }
 
+function isWeekend(date) {
+  return moment(date).isoWeekday() > 5;
+}
+
 module.exports = {
   now,
   yesterday,
@@ -50,4 +54,5 @@ module.exports = {
   formats,
   formatDate,
   isAfter,
+  isWeekend,
 };

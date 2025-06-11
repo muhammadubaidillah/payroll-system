@@ -1,4 +1,5 @@
 const { isOverlap, createPeriod } = require('../services/payrollService');
+const { getClientIp } = require('../utils');
 const { formatDate, isAfter } = require('../utils/datetime');
 
 async function addPayrollPeriod(req, res) {
@@ -24,7 +25,7 @@ async function addPayrollPeriod(req, res) {
     start_date: startDate,
     end_date: endDate,
     created_by: req.user.id,
-    created_ip: req.ip,
+    ip_address: getClientIp(req),
   });
 
   if (typeof result === 'object') {
