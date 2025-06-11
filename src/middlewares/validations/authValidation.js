@@ -1,5 +1,5 @@
 const joi = require('joi');
-const { doValidate } = require('../validator');
+const { doValidate } = require('../validatorMiddleware');
 
 function validateLogin(req, res, next) {
   doValidate(req, res, next, {

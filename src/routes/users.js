@@ -1,9 +1,10 @@
 const express = require('express');
-const { getEmployeeByUsername } = require('../models/users');
+const { getEmployeeByUsername } = require('../models/usersModel');
+const { tokenVerification } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.get('/employee', async (req, res) => {
+router.get('/employee', tokenVerification, async (req, res) => {
   try {
     const username = req.query.username;
     const employee = await getEmployeeByUsername(username);

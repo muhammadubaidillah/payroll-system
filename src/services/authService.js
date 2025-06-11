@@ -1,6 +1,6 @@
 const { signToken } = require('../utils/jwt');
 const { comparePassword } = require('../utils/hash');
-const { getEmployeeByUsername } = require('../models/users');
+const { getEmployeeByUsername } = require('../models/usersModel');
 
 async function authenticateUser(username, password) {
   const user = await getEmployeeByUsername(username);
