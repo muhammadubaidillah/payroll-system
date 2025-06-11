@@ -1,21 +1,21 @@
-const { handleSubmitOvertime } = require('../services/overtimeService');
+const { handleSubmitReimbursement } = require('../services/reimbursementService');
 const { getClientIp } = require('../utils');
 const logger = require('../utils/logger');
 
-async function submitOvertime(req, res) {
+async function submitReimbursement(req, res) {
   try {
     const ipAddress = getClientIp(req);
-    const { start_datetime: startTime, end_datetime: endTime } = req.body;
+    const { amount, description } = req.body;
 
-    const result = await handleSubmitOvertime({
+    const result = await handleSubmitReimbursement({
       userId: req.user.id,
-      startTime,
-      endTime,
+      amount,
+      description,
       ipAddress,
     });
 
     if (result.success) {
-      return res.status(201).json({ message: 'Overtime submitted' });
+      return res.status(201).json({ message: 'Reimbursement submitted' });
     } else {
       return res.status(400).json({ error: result.error });
     }
@@ -26,5 +26,5 @@ async function submitOvertime(req, res) {
 }
 
 module.exports = {
-  submitOvertime,
+  submitReimbursement,
 };

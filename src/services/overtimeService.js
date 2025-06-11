@@ -1,19 +1,16 @@
 const { v4: uuidv4 } = require('uuid');
 const {
-  createFromTime,
   isAfter,
   formatDate,
   now,
   isWeekend,
   isAfterHours,
   formats,
-  instance,
   isSameDay,
 } = require('../utils/datetime');
 const { insertOvertime } = require('../models/overtimeModel');
-const logger = require('../utils/logger');
 
-async function handleSubmit({ userId, startTime, endTime, ipAddress }) {
+async function handleSubmitOvertime({ userId, startTime, endTime, ipAddress }) {
   const start = new Date(startTime);
   const end = new Date(endTime);
 
@@ -69,5 +66,5 @@ async function handleSubmit({ userId, startTime, endTime, ipAddress }) {
 }
 
 module.exports = {
-  handleSubmit,
+  handleSubmitOvertime,
 };

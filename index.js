@@ -11,6 +11,7 @@ const authRoute = require('./src/routes/authRoute');
 const payrollRoute = require('./src/routes/payrollRoute');
 const attendanceRoute = require('./src/routes/attendanceRoute');
 const overtimeRoute = require('./src/routes/overtimeRoute');
+const reimbursementRoute = require('./src/routes/reimbursementRoute');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/auth', authRoute);
 app.use('/payroll', tokenVerification, payrollRoute);
 app.use('/attendance', tokenVerification, attendanceRoute);
 app.use('/overtime', tokenVerification, overtimeRoute);
+app.use('/reimbursement', tokenVerification, reimbursementRoute);
 
 app.use('/', (req, res) => {
   res.send({
