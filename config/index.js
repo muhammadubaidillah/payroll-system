@@ -17,6 +17,9 @@ const config = {
   salt: {
     rounds: process.env.SALT_ROUNDS || 10,
   },
+  sensitive: {
+    log_keys: process.env.SENSITIVE_LOG_KEYS || 'password,token',
+  },
 };
 
 module.exports = config;

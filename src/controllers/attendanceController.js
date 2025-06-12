@@ -1,39 +1,54 @@
 const { submitAttendance } = require('../services/attendanceService');
-const { getClientIp } = require('../utils');
 const logger = require('../utils/logger');
 
-async function checkIn(req, res) {
+async function checkIn(req, res, next) {
+  const { response, clientIp, user } = res.locals;
   try {
-    const ipAddress = getClientIp(req);
+    const { attendace_datetime: attendaceDatetime } = req.body;
 
-    const result = await submitAttendance(req.user.id, ipAddress, true);
+    const result = await submitAttendance({
+      userId: user.id,
+      ipAddress: clientIp,
+      isCheckIn: true,
+      attendaceDatetime,
+    });
 
-    if (result.success) {
-      return res.status(201).json({ message: 'Attendance submitted' });
-    } else {
-      return res.status(400).json({ error: result.error });
-    }
+    response.status = result.status;
+    response.success = result.success;
+    response.message = result.message;
   } catch (error) {
     logger.error(error);
-    return res.status(500).json({ error: 'Server error' });
+    response.status = 500;
+    response.success = false;
+    response.message = 'Internal Server Error';
   }
+
+  next();
 }
 
-async function checkOut(req, res) {
+async function checkOut(req, res, next) {
+  const { response, clientIp, user } = res.locals;
   try {
-    const ipAddress = getClientIp(req);
+    const { attendace_datetime: attendaceDatetime } = req.body;
 
-    const result = await submitAttendance(req.user.id, ipAddress, false);
+    const result = await submitAttendance({
+      userId: user.id,
+      ipAddress: clientIp,
+      isCheckIn: false,
+      attendaceDatetime,
+    });
 
-    if (result.success) {
-      return res.status(201).json({ message: 'Attendance submitted' });
-    } else {
-      return res.status(400).json({ error: result.error });
-    }
+    response.status = result.status;
+    response.success = result.success;
+    response.message = result.message;
   } catch (error) {
     logger.error(error);
-    return res.status(500).json({ error: 'Server error' });
+    response.status = 500;
+    response.success = false;
+    response.message = 'Internal Server Error';
   }
+
+  next();
 }
 
 module.exports = {

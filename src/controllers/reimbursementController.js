@@ -2,27 +2,29 @@ const { handleSubmitReimbursement } = require('../services/reimbursementService'
 const { getClientIp } = require('../utils');
 const logger = require('../utils/logger');
 
-async function submitReimbursement(req, res) {
+async function submitReimbursement(req, res, next) {
+  const { response, clientIp, user } = res.locals;
   try {
-    const ipAddress = getClientIp(req);
     const { amount, description } = req.body;
 
     const result = await handleSubmitReimbursement({
-      userId: req.user.id,
+      userId: user.id,
       amount,
       description,
-      ipAddress,
+      ipAddress: clientIp,
     });
 
-    if (result.success) {
-      return res.status(201).json({ message: 'Reimbursement submitted' });
-    } else {
-      return res.status(400).json({ error: result.error });
-    }
+    response.status = result.status;
+    response.success = result.success;
+    response.message = result.message;
   } catch (error) {
     logger.error(error);
-    return res.status(500).json({ error: 'Internal server error' });
+    response.status = 500;
+    response.success = false;
+    response.message = 'Internal Server Error';
   }
+
+  next();
 }
 
 module.exports = {

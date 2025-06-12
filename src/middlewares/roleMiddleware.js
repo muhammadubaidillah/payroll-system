@@ -1,16 +1,14 @@
 function isAdmin(req, res, next) {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ error: 'unauthorized', error_message: 'Forbidden: Admins only' });
+  if (res.locals.user.role !== 'admin') {
+    return res.status(403).json({ success: false, message: 'Forbidden: Admins only' });
   }
 
   next();
 }
 
 function isEmployee(req, res, next) {
-  if (req.user.role !== 'employee') {
-    return res
-      .status(403)
-      .json({ error: 'unauthorized', error_message: 'Forbidden: Employees only' });
+  if (res.locals.user.role !== 'employee') {
+    return res.status(403).json({ success: false, message: 'Forbidden: Employees only' });
   }
 
   next();

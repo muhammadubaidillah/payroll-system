@@ -1,40 +1,58 @@
-const { isOverlap, createPeriod } = require('../services/payrollService');
+const { response } = require('express');
+const { handleAddPeriod, handleRunPayroll } = require('../services/payrollService');
 const { getClientIp } = require('../utils');
-const { formatDate, isAfter } = require('../utils/datetime');
+const logger = require('../utils/logger');
 
-async function addPayrollPeriod(req, res) {
-  const { start_date: startDate, end_date: endDate } = req.body;
+async function addPayrollPeriod(req, res, next) {
+  const { response, clientIp, user } = res.locals;
+  try {
+    const { start_date: startDate, end_date: endDate } = req.body;
 
-  if (isAfter(formatDate(startDate), formatDate(endDate))) {
-    return res.status(400).json({
-      error: 'invalid_period',
-      error_description: 'start_date must be before end_date',
+    const result = await handleAddPeriod({
+      userId: user.id,
+      startDate,
+      endDate,
+      ipAddress: clientIp,
     });
+
+    response.status = result.status;
+    response.success = result.success;
+    response.message = result.message;
+  } catch (error) {
+    logger.error(error);
+    response.status = 500;
+    response.success = false;
+    response.message = 'Internal Server Error';
   }
 
-  const overlap = await isOverlap(startDate, endDate);
+  next();
+}
 
-  if (overlap) {
-    return res.status(400).json({
-      error: 'overlap_period',
-      error_description: 'Payroll period overlaps with existing period',
+async function runPayroll(req, res, next) {
+  try {
+    const { response, clientIp, user } = res.locals;
+    const { period_id: periodId } = req.body;
+    logger.info(`periodId: ${periodId} user: ${JSON.stringify(user)} clientIp: ${clientIp}`);
+
+    const result = await handleRunPayroll({
+      periodId,
+      userId: user.id,
+      ipAddress: clientIp,
     });
+
+    response.status = result.status;
+    response.success = result.success;
+    response.message = result.message;
+  } catch (error) {
+    response.status = 500;
+    response.success = false;
+    response.message = 'Internal Server Error';
   }
 
-  const result = await createPeriod({
-    start_date: startDate,
-    end_date: endDate,
-    created_by: req.user.id,
-    ip_address: getClientIp(req),
-  });
-
-  if (typeof result === 'object') {
-    return res.status(200).json({ success: true, id: result.id });
-  } else {
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
+  next();
 }
 
 module.exports = {
   addPayrollPeriod,
+  runPayroll,
 };

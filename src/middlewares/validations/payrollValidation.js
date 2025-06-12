@@ -8,6 +8,13 @@ function validateAddPeriod(req, res, next) {
   });
 }
 
+function validateRunPayroll(req, res, next) {
+  doValidate(req, res, next, {
+    period_id: joi.string().required(),
+  });
+}
+
 module.exports = {
   validateAddPeriod,
+  validateRunPayroll,
 };

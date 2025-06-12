@@ -5,21 +5,17 @@ function tokenVerification(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res
-      .status(401)
-      .json({ error: 'unauthorized', error_description: 'Missing or invalid token' });
+    return res.status(401).json({ success: false, message: 'Missing or invalid token' });
   }
 
   const token = authHeader.split(' ')[1];
   const payload = verifyToken(token);
 
   if (!payload) {
-    return res
-      .status(401)
-      .json({ error: 'unauthorized', error_description: 'Invalid or expired token' });
+    return res.status(401).json({ success: false, message: 'Invalid or expired token' });
   }
 
-  req.user = payload;
+  res.locals.user = payload;
   next();
 }
 

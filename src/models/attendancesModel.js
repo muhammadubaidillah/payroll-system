@@ -1,4 +1,4 @@
-const { querySingle, query } = require('../../database/pgsql');
+const { querySingle } = require('../../database/pgsql');
 
 function getTodayCheckIn(userId) {
   return querySingle(
@@ -19,7 +19,7 @@ function getTodayCheckOut(userId) {
 }
 
 function checkInAttendance({ id, userId, periodId, ipAddress }) {
-  return query(
+  return querySingle(
     `
     INSERT INTO attendances (
       id, user_id, date, period_id,
@@ -30,13 +30,13 @@ function checkInAttendance({ id, userId, periodId, ipAddress }) {
       $1, $2, CURRENT_DATE, $3,
       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
       $2, $2, $4, CURRENT_TIMESTAMP
-    )`,
+    ) RETURNING id`,
     [id, userId, periodId || null, ipAddress]
   );
 }
 
 function checkOutAttendance(userId) {
-  return query(
+  return querySingle(
     `UPDATE attendances 
       SET 
         check_out = CURRENT_TIMESTAMP,
@@ -45,8 +45,16 @@ function checkOutAttendance(userId) {
       WHERE user_id = $1 
         AND date = CURRENT_DATE 
         AND check_in IS NOT NULL 
-        AND check_out IS NULL`,
+        AND check_out IS NULL
+      RETURNING id`,
     [userId]
+  );
+}
+
+function getTotalAttendancePerPeriod(periodId, userId) {
+  return querySingle(
+    `SELECT COUNT(*) as total_attendaces FROM attendances WHERE period_id = $1 AND user_id = $2`,
+    [periodId, userId]
   );
 }
 
@@ -55,4 +63,5 @@ module.exports = {
   getTodayCheckOut,
   checkInAttendance,
   checkOutAttendance,
+  getTotalAttendancePerPeriod,
 };

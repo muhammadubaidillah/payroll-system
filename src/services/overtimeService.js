@@ -9,10 +9,11 @@ const {
   isSameDay,
 } = require('../utils/datetime');
 const { insertOvertime } = require('../models/overtimeModel');
+const { getTodayAttendancePeriodId } = require('../models/attendancePeriodsModel');
 
-async function handleSubmitOvertime({ userId, startTime, endTime, ipAddress }) {
-  const start = new Date(startTime);
-  const end = new Date(endTime);
+async function handleSubmitOvertime({ userId, startDatetime, endDatetime, ipAddress }) {
+  const start = new Date(startDatetime);
+  const end = new Date(endDatetime);
 
   if (isAfter(start, end)) {
     return {
@@ -34,6 +35,7 @@ async function handleSubmitOvertime({ userId, startTime, endTime, ipAddress }) {
   if (durationMinutes <= 0 || durationMinutes > 180) {
     return {
       success: false,
+      status: 400,
       error: `Overtime must be between 1 and 180 minutes`,
     };
   }
@@ -41,6 +43,7 @@ async function handleSubmitOvertime({ userId, startTime, endTime, ipAddress }) {
   if (!isWeekend(start) && !isAfterHours(start)) {
     return {
       success: false,
+      status: 400,
       error: `Overtime can only be submitted after 17:00 on weekdays`,
     };
   }
@@ -48,11 +51,14 @@ async function handleSubmitOvertime({ userId, startTime, endTime, ipAddress }) {
   if (!isSameDay(start, end)) {
     return {
       success: false,
+      status: 400,
       error: `Overtime can only be submitted on the same day`,
     };
   }
 
-  await insertOvertime({
+  const period = await getTodayAttendancePeriodId();
+
+  const result = await insertOvertime({
     id: uuidv4(),
     userId,
     date: formatDate(start, formats.FMT_DATE_TIME_YMD),
@@ -60,9 +66,22 @@ async function handleSubmitOvertime({ userId, startTime, endTime, ipAddress }) {
     endTime: formatDate(end, formats.FMT_DATE_TIME_HM),
     durationMinutes,
     ipAddress,
+    periodId: period.id,
   });
 
-  return { success: true };
+  if (typeof result === 'object') {
+    return {
+      success: true,
+      status: 200,
+      message: `Overtime submitted`,
+    };
+  } else {
+    return {
+      success: false,
+      status: 500,
+      message: `Internal Server Error`,
+    };
+  }
 }
 
 module.exports = {

@@ -9,11 +9,11 @@ function isPeriodOverlap(startDate, endDate) {
   );
 }
 
-function insertPeriod({ id, start_date, end_date, created_by, ip_address }) {
+function insertPeriod({ id, startDate, endDate, userId, totalDays, ipAddress }) {
   return querySingle(
-    `INSERT INTO attendance_periods (id, start_date, end_date, created_by, ip_address)
-    VALUES ($1, $2, $3, $4, $5) RETURNING id`,
-    [id, start_date, end_date, created_by, ip_address]
+    `INSERT INTO attendance_periods (id, start_date, end_date, total_working_days, created_by, ip_address)
+    VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+    [id, startDate, endDate, totalDays, userId, ipAddress]
   );
 }
 
@@ -23,8 +23,13 @@ function getTodayAttendancePeriodId() {
   );
 }
 
+function getTotalWorkingDays(periodId) {
+  return querySingle(`SELECT total_working_days FROM attendance_periods WHERE id = $1`, [periodId]);
+}
+
 module.exports = {
   isPeriodOverlap,
   insertPeriod,
   getTodayAttendancePeriodId,
+  getTotalWorkingDays,
 };

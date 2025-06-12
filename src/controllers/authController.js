@@ -1,17 +1,23 @@
 const { authenticateUser } = require('../services/authService');
 
-async function login(req, res) {
+async function login(req, res, next) {
   const { username, password } = req.body;
+  const { response } = res.locals;
 
   const result = await authenticateUser(username, password);
 
-  if (!result) {
-    return res
-      .status(401)
-      .json({ error: 'Unauthorized', error_description: 'Invalid username or password' });
+  if (result.success) {
+    response.status = result.status;
+    response.success = result.success;
+    response.message = result.message;
+    response.data = result.data;
+  } else {
+    response.status = result.status;
+    response.success = result.success;
+    response.message = result.message;
   }
 
-  res.status(200).json({ message: 'Login successful', token: result.token, role: result.role });
+  next();
 }
 
 module.exports = {

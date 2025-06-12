@@ -1,12 +1,13 @@
 const express = require('express');
 const helmet = require('helmet');
 const config = require('./config');
-const log = require('./src/utils/logger');
+const logger = require('./src/utils/logger');
 
 const { tokenVerification } = require('./src/middlewares/authMiddleware');
+const { recordHit, recordRequest, recordResponse } = require('./src/middlewares');
 
 const checkRoute = require('./src/routes/checkRoute');
-const usersRoute = require('./src/routes/users');
+// const usersRoute = require('./src/routes/users');
 const authRoute = require('./src/routes/authRoute');
 const payrollRoute = require('./src/routes/payrollRoute');
 const attendanceRoute = require('./src/routes/attendanceRoute');
@@ -20,13 +21,27 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/check', checkRoute);
-app.use('/users', usersRoute);
-app.use('/auth', authRoute);
 
-app.use('/payroll', tokenVerification, payrollRoute);
-app.use('/attendance', tokenVerification, attendanceRoute);
-app.use('/overtime', tokenVerification, overtimeRoute);
-app.use('/reimbursement', tokenVerification, reimbursementRoute);
+app.use('/auth', recordHit, recordRequest, authRoute, recordResponse);
+
+app.use('/payroll', recordHit, recordRequest, tokenVerification, payrollRoute, recordResponse);
+app.use(
+  '/attendance',
+  recordHit,
+  recordRequest,
+  tokenVerification,
+  attendanceRoute,
+  recordResponse
+);
+app.use('/overtime', recordHit, recordRequest, tokenVerification, overtimeRoute, recordResponse);
+app.use(
+  '/reimbursement',
+  recordHit,
+  recordRequest,
+  tokenVerification,
+  reimbursementRoute,
+  recordResponse
+);
 
 app.use('/', (req, res) => {
   res.send({
@@ -36,5 +51,5 @@ app.use('/', (req, res) => {
 });
 
 app.listen(config.port || 3001, '0.0.0.0', () =>
-  log.info(`Listening at port ${config.port || 3001}`)
+  logger.info(`Listening at port ${config.port || 3001}`)
 );

@@ -56,6 +56,22 @@ function isSameDay(date, comparedDate) {
   return moment(date).isSame(moment(comparedDate), 'day');
 }
 
+function isToday(date) {
+  return moment(date).isSame(moment(), 'day');
+}
+
+function countWorkingDays(startDate, endDate) {
+  let current = moment(startDate);
+  const end = moment(endDate);
+  let workingDays = 0;
+
+  for (; current.isSameOrBefore(end, 'day'); current.add(1, 'day')) {
+    if (current.isoWeekday() <= 5) workingDays++; // 1 = Monday, 7 = Sunday
+  }
+
+  return workingDays;
+}
+
 module.exports = {
   now,
   yesterday,
@@ -67,4 +83,6 @@ module.exports = {
   isWeekend,
   isAfterHours,
   isSameDay,
+  countWorkingDays,
+  isToday,
 };

@@ -5,11 +5,23 @@ const { getEmployeeByUsername } = require('../models/usersModel');
 async function authenticateUser(username, password) {
   const user = await getEmployeeByUsername(username);
 
-  if (!user) return null;
+  if (typeof user !== 'object') {
+    return {
+      success: false,
+      status: 401,
+      message: `Invalid username or password #1`,
+    };
+  }
 
-  const isPasswordMatch = await comparePassword(password, user.password);
+  const isPasswordMatch = comparePassword(password, user.password);
 
-  if (!isPasswordMatch) return null;
+  if (!isPasswordMatch) {
+    return {
+      success: false,
+      status: 401,
+      message: `Invalid username or password #2`,
+    };
+  }
 
   const token = signToken({
     id: user.id,
@@ -17,7 +29,12 @@ async function authenticateUser(username, password) {
     role: user.role,
   });
 
-  return { token, role: user.role };
+  return {
+    success: true,
+    status: 200,
+    message: 'Login successful',
+    data: { token, role: user.role },
+  };
 }
 
 module.exports = {
