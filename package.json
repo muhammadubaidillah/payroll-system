@@ -6,7 +6,9 @@
     "start": "node index.js",
     "nodemon": "nodemon index.js",
     "lint": "eslint . --ext .js",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "jest",
+    "test:watch": "jest --watchAll"
   },
   "keywords": [],
   "author": "",
@@ -17,8 +19,10 @@
     "@faker-js/faker": "^9.8.0",
     "eslint": "^9.28.0",
     "eslint-plugin-prettier": "^5.4.1",
+    "jest": "^30.0.0",
     "nodemon": "^3.1.10",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "supertest": "^7.1.1"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

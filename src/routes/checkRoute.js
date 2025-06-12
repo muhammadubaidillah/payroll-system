@@ -3,7 +3,9 @@ const { querySingle } = require('../../database/pgsql');
 
 const router = express.Router();
 
-router.get('/health', async (req, res) => res.send('OK'));
+router.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
 
 router.get('/db-connection', async (req, res) => {
   try {

@@ -23,7 +23,7 @@ function getTodayAttendancePeriodId() {
   );
 }
 
-function getTodayAttendancePeriodByDate(date) {
+function getAttendancePeriodByDate(date) {
   return querySingle(`SELECT id FROM attendance_periods WHERE $1 BETWEEN start_date AND end_date`, [
     date,
   ]);
@@ -38,5 +38,5 @@ module.exports = {
   insertPeriod,
   getTodayAttendancePeriodId,
   getTotalWorkingDays,
-  getTodayAttendancePeriodByDate,
+  getAttendancePeriodByDate,
 };

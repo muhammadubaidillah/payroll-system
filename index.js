@@ -47,11 +47,15 @@ app.use('/payslip', recordHit, recordRequest, tokenVerification, payslipRoute, r
 
 app.use('/', (req, res) => {
   res.send({
-    succes: false,
+    success: false,
     message: 'You shall not pass',
   });
 });
 
-app.listen(config.port || 3001, '0.0.0.0', () =>
-  logger.info(`Listening at port ${config.port || 3001}`)
-);
+if (require.main === module) {
+  app.listen(config.port || 3001, '0.0.0.0', () =>
+    logger.info(`Listening at port ${config.port || 3001}`)
+  );
+}
+
+module.exports = app;

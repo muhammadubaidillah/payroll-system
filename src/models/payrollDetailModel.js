@@ -1,10 +1,19 @@
-const { querySingle } = require('../../database/pgsql');
+const { querySingle, queryList } = require('../../database/pgsql');
 
-function getPayrollDetailByUserAndPeriod(userId, payrollId) {
+function getPayrollDetailByUserAndPayrollId(userId, payrollId) {
   return querySingle(`SELECT * FROM payroll_details WHERE user_id = $1 AND payroll_id = $2`, [
     userId,
     payrollId,
   ]);
+}
+
+function getPayrollDetailByPayrollId(payrollId) {
+  return queryList(
+    `SELECT pd.*, u.full_name FROM payroll_details pd 
+    LEFT JOIN users u ON u.id = pd.user_id 
+    WHERE pd.payroll_id = $1`,
+    [payrollId]
+  );
 }
 
 function insertPayrollDetail({
@@ -42,5 +51,6 @@ function insertPayrollDetail({
 
 module.exports = {
   insertPayrollDetail,
-  getPayrollDetailByUserAndPeriod,
+  getPayrollDetailByUserAndPayrollId,
+  getPayrollDetailByPayrollId,
 };
