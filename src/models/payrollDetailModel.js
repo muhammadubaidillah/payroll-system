@@ -1,5 +1,12 @@
 const { querySingle } = require('../../database/pgsql');
 
+function getPayrollDetailByUserAndPeriod(userId, payrollId) {
+  return querySingle(`SELECT * FROM payroll_details WHERE user_id = $1 AND payroll_id = $2`, [
+    userId,
+    payrollId,
+  ]);
+}
+
 function insertPayrollDetail({
   id,
   payrollId,
@@ -35,4 +42,5 @@ function insertPayrollDetail({
 
 module.exports = {
   insertPayrollDetail,
+  getPayrollDetailByUserAndPeriod,
 };

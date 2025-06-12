@@ -13,6 +13,7 @@ const payrollRoute = require('./src/routes/payrollRoute');
 const attendanceRoute = require('./src/routes/attendanceRoute');
 const overtimeRoute = require('./src/routes/overtimeRoute');
 const reimbursementRoute = require('./src/routes/reimbursementRoute');
+const payslipRoute = require('./src/routes/payslipRoute');
 
 const app = express();
 
@@ -42,11 +43,12 @@ app.use(
   reimbursementRoute,
   recordResponse
 );
+app.use('/payslip', recordHit, recordRequest, tokenVerification, payslipRoute, recordResponse);
 
 app.use('/', (req, res) => {
   res.send({
-    error: 'invalid_path',
-    error_description: 'You shall not pass',
+    succes: false,
+    message: 'You shall not pass',
   });
 });
 

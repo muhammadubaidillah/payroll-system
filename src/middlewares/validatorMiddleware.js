@@ -17,8 +17,8 @@ function doValidate(req, res, next, config, customObject) {
 
   if (error) {
     return res.send({
-      error: 'invalid_param',
-      error_description: error.details?.[0]?.message || 'Validation error',
+      success: false,
+      message: error.details?.[0]?.message || 'Validation error',
     });
   }
 

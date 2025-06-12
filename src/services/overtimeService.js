@@ -19,7 +19,7 @@ async function handleSubmitOvertime({ userId, startDatetime, endDatetime, ipAddr
     return {
       success: false,
       status: 400,
-      error: `End time must be after start time`,
+      message: `End time must be after start time`,
     };
   }
 
@@ -27,7 +27,7 @@ async function handleSubmitOvertime({ userId, startDatetime, endDatetime, ipAddr
     return {
       success: false,
       status: 400,
-      error: `Cannot submit overtime for the future`,
+      message: `Cannot submit overtime for the future`,
     };
   }
 
@@ -36,7 +36,7 @@ async function handleSubmitOvertime({ userId, startDatetime, endDatetime, ipAddr
     return {
       success: false,
       status: 400,
-      error: `Overtime must be between 1 and 180 minutes`,
+      message: `Overtime must be between 1 and 180 minutes`,
     };
   }
 
@@ -44,7 +44,7 @@ async function handleSubmitOvertime({ userId, startDatetime, endDatetime, ipAddr
     return {
       success: false,
       status: 400,
-      error: `Overtime can only be submitted after 17:00 on weekdays`,
+      message: `Overtime can only be submitted after 17:00 on weekdays`,
     };
   }
 
@@ -52,7 +52,7 @@ async function handleSubmitOvertime({ userId, startDatetime, endDatetime, ipAddr
     return {
       success: false,
       status: 400,
-      error: `Overtime can only be submitted on the same day`,
+      message: `Overtime can only be submitted on the same day`,
     };
   }
 

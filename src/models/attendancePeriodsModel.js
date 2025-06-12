@@ -23,6 +23,12 @@ function getTodayAttendancePeriodId() {
   );
 }
 
+function getTodayAttendancePeriodByDate(date) {
+  return querySingle(`SELECT id FROM attendance_periods WHERE $1 BETWEEN start_date AND end_date`, [
+    date,
+  ]);
+}
+
 function getTotalWorkingDays(periodId) {
   return querySingle(`SELECT total_working_days FROM attendance_periods WHERE id = $1`, [periodId]);
 }
@@ -32,4 +38,5 @@ module.exports = {
   insertPeriod,
   getTodayAttendancePeriodId,
   getTotalWorkingDays,
+  getTodayAttendancePeriodByDate,
 };
