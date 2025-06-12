@@ -159,6 +159,9 @@ Setup and Installation
       - DB_USER, DB_HOST, DB_DATABASE, DB_PASSWORD, DB_PORT: PostgreSQL connection details.
       - JWT_SECRET: A strong, secret key for signing JWTs.
       - Other necessary environment variables.
+    * **Database Setup**:
+      - Import the database schema: `psql -U your_username -d your_database_name -f database/schema.sql` (Replace `your_username` and `your_database_name` accordingly).
+      - Run the seeder script to populate initial data (e.g., users): `node seeder.js` (Adjust this command if your seeder script is run differently).
     - These variables are loaded by config.js.
 
 Running the Application
