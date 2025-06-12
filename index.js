@@ -7,7 +7,6 @@ const { tokenVerification } = require('./src/middlewares/authMiddleware');
 const { recordHit, recordRequest, recordResponse } = require('./src/middlewares');
 
 const checkRoute = require('./src/routes/checkRoute');
-// const usersRoute = require('./src/routes/users');
 const authRoute = require('./src/routes/authRoute');
 const payrollRoute = require('./src/routes/payrollRoute');
 const attendanceRoute = require('./src/routes/attendanceRoute');
